@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [ -f $HOME/.dmenurc ]; then
+   source $HOME/.dmenurc
+else
+   DMENU="dmenu -i"
+fi
+
+DMENU="$DMENU -p 'Quickmarks:' -w 400"
+QUICKMARKS=/home/<user>/.config/dwb/default/quickmarks
+
+GOTO=$(cat $QUICKMARKS | awk '{print $1}' | eval $DMENU)
+
+if [ $? -eq 0 ]; then
+   exec dwb $(cat $QUICKMARKS | grep "$GOTO" | awk '{print $2}')
+fi

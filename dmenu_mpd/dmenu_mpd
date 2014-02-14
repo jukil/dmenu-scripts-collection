@@ -1,0 +1,41 @@
+#!/bin/bash
+source $HOME/.config/dplay/config
+function dmenu_t () {
+    if [ "$dmenu_trans" == "1" ]; then
+        dmenu -o 0.9 -i -l 20 -fn "$font" -nf "$nf" -nb "$nb" -sf "$sf" -sb "$sb"
+    else
+        dmenu -i -l 20 -fn "$font" -nf "$nf" -nb "$nb" -sf "$sf" -sb "$sb"
+    fi
+}
+
+case $1 in
+    -a)
+     ALBUM=$(echo -e "$(mpc list album)" | dmenu_t -p "$2 Album:");
+     if [[ "$ALBUM" = "" ]]
+         then echo "no selection made"
+     else
+         if [[ $2 == replace ]]
+           then mpc clear
+                mpc find album "$ALBUM" | mpc add && mpc play;
+         elif [[ $2 == insert ]]
+            then mpc find album "$ALBUM" | mpc insert;
+         else mpc find album "$ALBUM" | mpc add;
+         fi
+     fi
+;;
+    -t)
+     TRACK=$(echo -e "$(mpc listall)" | dmenu_t -p "$2 Track:");
+     if [[ "$TRACK" = "" ]]
+         then echo "no selection made"
+     else
+         if [[ $2 == replace ]]
+           then mpc clear
+                mpc add "$TRACK" && mpc play;
+         elif [[ $2 == insert ]]
+           then mpc insert "$TRACK";
+         else mpc add "$TRACK";
+         fi
+     fi
+;;
+*)
+esac

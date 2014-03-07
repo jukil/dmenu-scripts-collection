@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# d-edit: Use dmenu to open and edit a file from a given list.
+
+# Global variables:
+FILES=${1:-"/home/jared/code/dotfiles"}
+DMENU='dmenu -l -i'
+EDITOR='urxvtc -e vim'
+# Show list of options
+choice=$(ls -a "${FILES}" | $DMENU -p "File to edit:")
+
+if [ $choice ]; then
+    $EDITOR ${FILES}/${choice}
+fi

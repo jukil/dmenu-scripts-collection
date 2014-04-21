@@ -5,32 +5,33 @@ if [ -d "$cachedir" ]; then
 else
 	cache=$HOME/.dmenu_cache # if no xdg dir, fall back to dotfile in ~
 fi
-cmd=`( 
+cmd=`(
 	IFS=:
         if [ -f ~/.zsh_aliases ]; then
 		  aliases=( ~/.zsh_aliases )
 		elif [ -f ~/.bash_aliases ]; then
   		  aliases=( ~/.bash_aliases )
 		fi
-        #functions=( ~/.zsh_functions ~/.bash_functions )
- if stest -dqr -n "$cache" $PATH || stest -fqr -n "$cache" "$aliases"; then 
-          ( 
-            stest -flx $PATH 
-            source $aliases 
+
+		if [ ~/.bash_functions ]; then
+          functions=( ~/.bash_functions )
+        fi
+
+ if stest -dqr -n "$cache" $PATH || stest -fqr -n "$cache" "$aliases" || stest -fqr -n "$cache" "$functions"; then
+          (
+            stest -flx $PATH
+            source $aliases
 	    	alias | awk -F '[ =]' '{print $2}'
-	    	#source $functions 
-	    	#functions | sed 's/(.*//'
-          ) | sort -u | tee "$cache" | dmenu "$@" 
+	    	source $functions
+	    	compgen -A function
+          ) | sort -u | tee "$cache" | dmenu "$@"
 	else
 		dmenu "$@" < "$cache"
 	fi
-)` 
-# Perform alias expansion on $cmd 
+)`
+# Perform alias expansion on $cmd
 if [ -f ~/.zsh_aliases ]; then
-  echo -e "source ~/.zsh_aliases \n $cmd" | bash -O expand_aliases & 
-elif [ -f ~/.bash_aliases ]; then
-  echo -e "source ~/.bash_aliases \n $cmd" | bash -O expand_aliases &	
+  echo -e "source ~/.zsh_aliases \n $cmd" | bash -O expand_aliases &
+elif [ -f ~/.bash_aliases ] && [ -f ~/.bash_functions ]; then
+  echo -e "source ~/.bash_aliases \n source ~/.bash_functions \n $cmd" | bash -O expand_aliases &
 fi
-
-#echo -e "source ~/.zsh_functions \n $cmd" | bash -O expand_functions &
-#echo -e "source ~/.bash_functions \n $cmd" | bash -O expand_functions &

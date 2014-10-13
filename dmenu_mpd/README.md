@@ -16,7 +16,7 @@ A feature-rich mpd script.
 * enable/disable scrobbling ([lastfm script needed](http://git.53280.de/carnager/scripts/tree/lastfm))
 * add/remove current artist to scrobbling blacklist ([lastfm script needed](http://git.53280.de/carnager/scripts/tree/lastfm))
 
-# [Download](http://git.53280.de/carnager/scripts/tree/mpdMenu)
+# [Download](https://github.com/carnager/clerk)
 
 # Contribution
 

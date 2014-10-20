@@ -1,0 +1,23 @@
+#!/bin/bash
+cache=~/.cache/dmenu_run
+freq=~/.dmenu_history
+aliases=~/.zsh_aliases
+source $aliases
+
+(compgen -a; compgen -c | grep -vxF "$(compgen -a)") | sort | tail -n +10 > $cache
+
+sorted=$(sort $freq | uniq -c | sort -hr | colrm 1 8)
+cmd=`(echo "$sorted"; cat $cache | grep -vxF "$sorted") | dmenu "$@"`
+if ! [ "$cmd" == "" ] && ! [ "$(grep ${cmd/;/} $cache)" == "" ]; then
+    echo ${cmd/;/} >> $freq
+
+    cmdexec=$(alias | grep "${cmd/;/}=" | cut -f2 -d"=" | tr -d "'")
+    if [ -z "$cmdexec" ]; then
+        cmdexec=${cmd/;/}
+    fi
+
+    case $cmd in
+        *\;)    cmdexec="urxvt -e $cmdexec" ;;
+    esac
+    echo "$cmdexec" | bash
+fi

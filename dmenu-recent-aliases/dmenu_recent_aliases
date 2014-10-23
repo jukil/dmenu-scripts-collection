@@ -11,7 +11,7 @@ cmd=`(echo "$sorted"; cat $cache | grep -vxF "$sorted") | dmenu "$@"`
 if ! [ "$cmd" == "" ] && ! [ "$(grep ${cmd/;/} $cache)" == "" ]; then
     echo ${cmd/;/} >> $freq
 
-    cmdexec=$(alias | grep "${cmd/;/}=" | cut -f2 -d"=" | tr -d "'")
+    cmdexec=$(alias | grep "${cmd/;/}=" | cut -f2 -d"'" | tr -d "'")
     if [ -z "$cmdexec" ]; then
         cmdexec=${cmd/;/}
     fi

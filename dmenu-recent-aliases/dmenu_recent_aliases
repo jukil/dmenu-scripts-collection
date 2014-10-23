@@ -19,5 +19,8 @@ if ! [ "$cmd" == "" ] && ! [ "$(grep ${cmd/;/} $cache)" == "" ]; then
     case $cmd in
         *\;)    cmdexec="urxvt -e $cmdexec" ;;
     esac
-    echo "$cmdexec" | compgen -F $cmdexec | bash
+    # Ugly workaround to run functions...
+    echo "$cmdexec" | compgen -F "$cmdexec" | bash
+    # ...and aliases
+    echo "$cmdexec" | bash
 fi

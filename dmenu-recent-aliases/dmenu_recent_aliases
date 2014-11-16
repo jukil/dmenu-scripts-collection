@@ -8,7 +8,7 @@ case "$1" in
     remove)
         # To remove a file from history: 
         # $ dmenu_recent_aliases remove <name> 
-        sed -i '/$2/d' $freq
+        sed -i '/${2}/d' $freq
     ;;
     *)
     (compgen -a; compgen -c | grep -vxF "$(compgen -a)") | sort | tail -n +10 > $cache

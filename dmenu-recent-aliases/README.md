@@ -13,6 +13,12 @@ freq=~/.dmenu_history
 aliases=~/.zsh_aliases
 ```
 
+Over time, `dmenu_recent_aliases` will store your most frequently used files in `~/.dmenu_history`. By default, these entries will persist even on removal of applications. In order to clean your history, you have to manually run the following command:
+
+```bash
+$ dmenu_recent_aliases remove <application_name>
+```
+
 # Contributions
 
 * Samee Zhaur and his [propsed patch](https://groups.google.com/forum/#!topic/wmii/Mvv5i2CPo7A)
